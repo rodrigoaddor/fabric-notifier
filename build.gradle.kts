@@ -19,7 +19,7 @@ val mavenGroup: String by project
 group = mavenGroup
 
 repositories {
-    maven("https://maven.shedaniel.me/")
+    mavenCentral()
 }
 
 dependencies {
@@ -38,9 +38,8 @@ dependencies {
     val fabricKotlinVersion: String by project
     modImplementation("net.fabricmc", "fabric-language-kotlin", fabricKotlinVersion)
 
-    modApi("me.shedaniel.cloth:cloth-config-fabric:7.0.72") {
-        exclude(mapOf("group" to "net.fabricmc.fabric-api"))
-    }
+    implementation("org.spongepowered:configurate-yaml:4.1.2")
+    implementation("org.spongepowered:configurate-extra-kotlin:4.1.2")
 }
 
 tasks {
