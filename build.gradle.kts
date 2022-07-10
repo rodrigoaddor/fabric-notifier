@@ -1,8 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("fabric-loom")
     id("maven-publish")
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 
     val kotlinVersion: String by System.getProperties()
     kotlin("jvm").version(kotlinVersion)
@@ -38,7 +40,7 @@ dependencies {
     val fabricKotlinVersion: String by project
     modImplementation("net.fabricmc", "fabric-language-kotlin", fabricKotlinVersion)
 
-    implementation("org.spongepowered:configurate-yaml:4.1.2")
+    implementation("org.spongepowered:configurate-yaml:4.1.2")?.let { shadow(it) }
     implementation("org.spongepowered:configurate-extra-kotlin:4.1.2")
 }
 
@@ -58,6 +60,15 @@ tasks {
             apiVersion = kotlinVersion
             languageVersion = kotlinVersion
         }
+    }
+
+    withType<ShadowJar> {
+        configurations = listOf(project.configurations.shadow.get())
+    }
+
+    remapJar {
+        dependsOn(shadowJar)
+        inputFile.set(shadowJar.get().archiveFile)
     }
 
     jar { from("LICENSE") { rename { "${it}_${base.archivesName}" } } }
