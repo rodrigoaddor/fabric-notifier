@@ -34,6 +34,7 @@ val yarnMappings: String by project
 val loaderVersion: String by project
 val fabricVersion: String by project
 val fabricKotlinVersion: String by project
+val ktorVersion: String by project
 
 dependencies {
     minecraft("com.mojang", "minecraft", minecraftVersion)
@@ -45,6 +46,11 @@ dependencies {
     include(modImplementation("net.fabricmc", "fabric-language-kotlin", fabricKotlinVersion))
 
     transitiveInclude(implementation("com.charleskorn.kaml:kaml:0.46.0")!!)
+
+    include(implementation("io.ktor", "ktor-client-core", ktorVersion))
+    include(implementation("io.ktor", "ktor-client-cio", ktorVersion))
+    include(implementation("io.ktor", "ktor-client-content-negotiation", ktorVersion))
+    include(implementation("io.ktor", "ktor-serialization-kotlinx-json", ktorVersion))
 
     transitiveInclude.resolvedConfiguration.resolvedArtifacts.forEach {
         include(it.moduleVersion.id.toString())

@@ -3,6 +3,7 @@ package dev.rodrick.acer
 import dev.rodrick.acer.commands.AcerCommand
 import dev.rodrick.acer.commands.BaseCommand
 import dev.rodrick.acer.config.AcerConfig
+import dev.rodrick.acer.events.PlayerNotifier
 import dev.rodrick.acer.events.SaplingPlanter
 import net.fabricmc.api.DedicatedServerModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
@@ -28,5 +29,6 @@ object AcerMod : DedicatedServerModInitializer {
         }
 
         SaplingPlanter.init()
+        PlayerNotifier.init()
     }
 }
