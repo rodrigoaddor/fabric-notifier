@@ -1,8 +1,8 @@
 package dev.rodrick.acer.commands
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import dev.rodrick.acer.config.AcerConfig
 import dev.rodrick.acer.AcerMod
+import dev.rodrick.acer.config.AcerConfig
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.Text
