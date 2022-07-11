@@ -22,8 +22,8 @@
       }
     ]
   },
-  "_mixins": [
-    "modid.mixins.json"
+  "mixins": [
+    "acer.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.8",

@@ -1,11 +1,9 @@
 {
   "required": true,
-  "package": "net.fabricmc.example.mixin",
+  "package": "dev.rodrick.acer.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [
-  ],
-  "client": [
-    "ExampleMixin"
+  "server": [
+    "EntityDespawnMixin"
   ],
   "injectors": {
     "defaultRequire": 1
