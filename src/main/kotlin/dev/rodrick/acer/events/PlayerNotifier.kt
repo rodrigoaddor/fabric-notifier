@@ -1,6 +1,7 @@
 package dev.rodrick.acer.events
 
 import dev.rodrick.acer.AcerMod
+import dev.rodrick.acer.annotations.Init
 import dev.rodrick.acer.config.AcerConfig
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -26,6 +27,7 @@ object PlayerNotifier {
 
     private const val ENDPOINT = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush"
 
+    @Init
     fun init() {
         ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
             if (AcerConfig.data.join.enabled) {
