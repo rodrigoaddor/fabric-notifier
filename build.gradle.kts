@@ -7,7 +7,9 @@ val transitiveInclude: Configuration by configurations.creating {
 }
 
 plugins {
+    idea
     id("fabric-loom") version "0.12-SNAPSHOT"
+    id("com.google.devtools.ksp") version "1.7.10-1.0.6"
 
     val kotlinVersion: String by System.getProperties()
     kotlin("jvm").version(kotlinVersion)
@@ -52,8 +54,24 @@ dependencies {
     include(implementation("io.ktor", "ktor-client-content-negotiation", ktorVersion))
     include(implementation("io.ktor", "ktor-serialization-kotlinx-json", ktorVersion))
 
+    ksp(implementation(project(":gen"))!!)
+
     transitiveInclude.resolvedConfiguration.resolvedArtifacts.forEach {
         include(it.moduleVersion.id.toString())
+    }
+}
+
+kotlin {
+    sourceSets.main {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
+}
+
+idea {
+    module {
+        val file = file("build/generated/ksp/main/kotlin/")
+        sourceDirs = sourceDirs + file
+        generatedSourceDirs = generatedSourceDirs + file
     }
 }
 
