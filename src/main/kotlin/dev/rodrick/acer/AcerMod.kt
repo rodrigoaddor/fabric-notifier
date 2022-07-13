@@ -1,7 +1,5 @@
 package dev.rodrick.acer
 
-import dev.rodrick.acer.commands.AcerCommand
-import dev.rodrick.acer.commands.BaseCommand
 import dev.rodrick.acer.config.AcerConfig
 import net.fabricmc.api.DedicatedServerModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
@@ -15,17 +13,10 @@ object AcerMod : DedicatedServerModInitializer {
 
     val logger: Logger = LogManager.getLogger(MOD_NAME)
 
-    private val COMMANDS = listOf<BaseCommand>(
-        AcerCommand
-    )
-
     override fun onInitializeServer() {
         AcerConfig.load()
 
-        CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
-            COMMANDS.forEach { dispatcher.register(it.command) }
-        }
-
         Initializer.init()
+        CommandRegistrationCallback.EVENT.register(Initializer::initCommands)
     }
 }

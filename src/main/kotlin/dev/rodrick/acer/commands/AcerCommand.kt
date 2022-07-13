@@ -1,13 +1,29 @@
 package dev.rodrick.acer.commands
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import com.mojang.brigadier.CommandDispatcher
 import dev.rodrick.acer.AcerMod
+import dev.rodrick.acer.annotations.InitCommand
 import dev.rodrick.acer.config.AcerConfig
+import net.minecraft.command.CommandRegistryAccess
+import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.text.Text
 
 object AcerCommand : BaseCommand {
+    @InitCommand
+    override fun register(
+        dispatcher: CommandDispatcher<ServerCommandSource>,
+        registryAccess: CommandRegistryAccess,
+        environment: CommandManager.RegistrationEnvironment
+    ) {
+        dispatcher.register(
+            literal("acer")
+                .then(reloadConfig)
+                .then(listConfig)
+        )
+    }
+
     private val reloadConfig = literal("reload").executes { context ->
         try {
             AcerConfig.load()
@@ -29,8 +45,4 @@ object AcerCommand : BaseCommand {
         )
         0
     }
-
-    override val command: LiteralArgumentBuilder<ServerCommandSource> = literal("acer")
-        .then(reloadConfig)
-        .then(listConfig)
 }

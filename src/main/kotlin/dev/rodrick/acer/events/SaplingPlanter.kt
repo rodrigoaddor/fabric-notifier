@@ -1,5 +1,6 @@
 package dev.rodrick.acer.events
 
+import dev.rodrick.acer.annotations.Init
 import dev.rodrick.acer.config.AcerConfig
 import dev.rodrick.acer.event.EntityDespawnCallback
 import net.minecraft.entity.ItemEntity
@@ -14,6 +15,7 @@ import kotlin.math.pow
 object SaplingPlanter {
     private val SAPLINGS = TagKey.of(Registry.ITEM_KEY, Identifier("minecraft", "saplings"))
 
+    @Init
     fun init() = EntityDespawnCallback.EVENT.register { entity ->
         val (enabled, chance) = AcerConfig.data.replantSaplings
 

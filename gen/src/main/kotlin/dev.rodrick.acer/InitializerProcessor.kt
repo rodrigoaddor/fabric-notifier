@@ -1,50 +1,68 @@
 package dev.rodrick.acer
 
 import com.google.devtools.ksp.processing.*
-import com.google.devtools.ksp.symbol.KSAnnotated
-import com.google.devtools.ksp.symbol.KSFunctionDeclaration
+import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.MemberName
-import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.ksp.writeTo
 
 class InitializerProcessor(
-    private val codeGenerator: CodeGenerator,
-    private val logger: KSPLogger,
-    private val options: Map<String, String>
+    private val codeGenerator: CodeGenerator, private val logger: KSPLogger, private val options: Map<String, String>
 ) : SymbolProcessor {
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        val symbols = resolver
-            .getSymbolsWithAnnotation("dev.rodrick.acer.annotations.Init")
-            .filterIsInstance<KSFunctionDeclaration>()
+        val initSymbols = resolver.getSymbolsWithAnnotation("dev.rodrick.acer.annotations.Init")
+            .filterIsInstance<KSFunctionDeclaration>().filter { it.parentDeclaration?.isObject ?: false }
 
-        if (!symbols.iterator().hasNext()) return emptyList()
+        val commandSymbols = resolver.getSymbolsWithAnnotation("dev.rodrick.acer.annotations.InitCommand")
+            .filterIsInstance<KSFunctionDeclaration>().filter { it.parentDeclaration?.isObject ?: false }
 
-        val file = FileSpec.builder("dev.rodrick.acer", "Initializer")
-            .addType(
-                TypeSpec.objectBuilder("Initializer")
-                    .addFunction(
-                        FunSpec.builder("init").apply {
-                            symbols.forEach { symbol ->
-                                addStatement(
-                                    "%M()",
-                                    MemberName(
-                                        "${symbol.packageName.asString()}.${symbol.parentDeclaration?.simpleName?.asString()}",
-                                        symbol.simpleName.asString()
-                                    )
-                                )
-                            }
-                        }
-                            .build()
-                    )
-                    .build()
-            )
-            .build()
+        if (!initSymbols.iterator().hasNext() && !commandSymbols.iterator().hasNext()) return emptyList()
+
+        val serverCommandSource = ClassName("net.minecraft.server.command", "ServerCommandSource")
+        val commandDispatcher = ClassName(
+            "com.mojang.brigadier", "CommandDispatcher"
+        ).parameterizedBy(serverCommandSource)
+        val commandRegistryAccess = ClassName("net.minecraft.command", "CommandRegistryAccess")
+        val registrationEnvironment =
+            ClassName("net.minecraft.server.command.CommandManager", "RegistrationEnvironment")
+
+        val file = FileSpec.builder("dev.rodrick.acer", "Initializer").addType(
+            TypeSpec.objectBuilder("Initializer").addFunction(
+                FunSpec.builder("init").apply {
+                    initSymbols.forEach { symbol ->
+                        addStatement(
+                            "%M()", MemberName(
+                                "${symbol.packageName.asString()}.${symbol.parentDeclaration?.simpleName?.asString()}",
+                                symbol.simpleName.asString()
+                            )
+                        )
+                    }
+                }.build()
+            ).addFunction(
+                FunSpec.builder("initCommands").apply {
+                    addParameter("dispatcher", commandDispatcher)
+                    addParameter("registryAccess", commandRegistryAccess)
+                    addParameter("environment", registrationEnvironment)
+                    commandSymbols.forEach { symbol ->
+                        val func = MemberName(
+                            "${symbol.packageName.asString()}.${symbol.parentDeclaration?.simpleName?.asString()}",
+                            symbol.simpleName.asString()
+                        )
+                        addStatement(
+                            "%M(dispatcher, registryAccess, environment)",
+                            func
+                        )
+                    }
+                }.build()
+            ).build()
+        ).build()
 
         file.writeTo(codeGenerator, Dependencies(false, *resolver.getAllFiles().toList().toTypedArray()))
 
-        return symbols.filterNot { it.validate() }.toList()
+        return initSymbols.filterNot { it.validate() }.toList()
     }
+
+    private val KSDeclaration.isObject: Boolean
+        get() = (this as? KSClassDeclaration)?.classKind == ClassKind.OBJECT
 }
