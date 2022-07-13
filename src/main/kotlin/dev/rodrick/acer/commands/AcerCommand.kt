@@ -19,6 +19,7 @@ object AcerCommand : BaseCommand {
     ) {
         dispatcher.register(
             literal("acer")
+                .requires { source -> source.hasPermissionLevel(4) }
                 .then(reloadConfig)
                 .then(listConfig)
         )
