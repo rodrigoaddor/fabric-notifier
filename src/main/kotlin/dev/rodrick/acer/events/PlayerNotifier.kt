@@ -30,20 +30,20 @@ object PlayerNotifier {
     @Init
     fun init() {
         ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
-            if (AcerConfig.data.join.enabled) {
-                sendNotification("Player joined", "${handler.player.name} joined the server")
+            if (AcerConfig.data.notifier.onJoin) {
+                sendNotification("Player joined", "${handler.player.name.string} joined the server")
             }
         }
 
         ServerPlayConnectionEvents.DISCONNECT.register { handler, _ ->
-            if (AcerConfig.data.join.enabled) {
+            if (AcerConfig.data.notifier.onLeave) {
                 sendNotification("Player left", "${handler.player.name.string} left the server")
             }
         }
     }
 
     private fun sendNotification(title: String, text: String?) = runBlocking {
-        val (_, apiKey, devices) = AcerConfig.data.join
+        val (_, _, apiKey, devices) = AcerConfig.data.notifier
 
         val body = NotificationOptions(apiKey, devices.joinToString(","), title, text)
 

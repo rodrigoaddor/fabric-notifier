@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable()
 data class AcerConfigData(
     val replantSaplings: ReplantSaplings = ReplantSaplings(),
-    val join: Notifier = Notifier()
+    val notifier: Notifier = Notifier()
 ) {
     @Serializable
     data class ReplantSaplings(
@@ -15,7 +15,8 @@ data class AcerConfigData(
 
     @Serializable
     data class Notifier(
-        val enabled: Boolean = false,
+        val onJoin: Boolean = false,
+        val onLeave: Boolean = false,
         val apiKey: String = "",
         val devices: Set<String> = emptySet()
     )
