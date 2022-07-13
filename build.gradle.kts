@@ -50,9 +50,9 @@ dependencies {
     transitiveInclude(implementation("com.charleskorn.kaml:kaml:0.46.0")!!)
 
     include(implementation("io.ktor", "ktor-client-core", ktorVersion))
-    include(implementation("io.ktor", "ktor-client-cio", ktorVersion))
-    include(implementation("io.ktor", "ktor-client-content-negotiation", ktorVersion))
-    include(implementation("io.ktor", "ktor-serialization-kotlinx-json", ktorVersion))
+    transitiveInclude(implementation("io.ktor", "ktor-client-cio", ktorVersion))
+    transitiveInclude(implementation("io.ktor", "ktor-client-content-negotiation", ktorVersion))
+    transitiveInclude(implementation("io.ktor", "ktor-serialization-kotlinx-json", ktorVersion))
 
     ksp(implementation(project(":gen"))!!)
 
