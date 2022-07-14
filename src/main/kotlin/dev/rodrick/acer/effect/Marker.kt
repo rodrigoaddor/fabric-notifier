@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.inventory.Inventory
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
@@ -74,6 +75,8 @@ object Marker {
     }
 
     private fun removeAt(world: World, pos: BlockPos) {
+        if (world.getBlockState(pos) !is Inventory) return
+
         val box = Box(pos.x + 0.0, pos.y + 0.0, pos.z + 0.0, pos.x + 1.0, pos.y + 1.0, pos.z + 1.0)
 
         world.getEntitiesByType(EntityType.SHULKER, box) { it.isMarker }.forEach { marker ->
