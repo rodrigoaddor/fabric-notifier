@@ -7,13 +7,11 @@ import net.minecraft.entity.ItemEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.tag.TagKey
-import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
+import net.minecraft.tag.ItemTags
 import kotlin.math.pow
 
 object SaplingPlanter {
-    private val SAPLINGS = TagKey.of(Registry.ITEM_KEY, Identifier("minecraft", "saplings"))
+    private val SAPLINGS = ItemTags.SAPLINGS
 
     @Init
     fun init() = EntityDespawnCallback.EVENT.register { entity ->
