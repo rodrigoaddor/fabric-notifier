@@ -1,15 +1,15 @@
-name: Gradle build
+name: Build Acer
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags:
+      - 'v*'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/checkout@v2
@@ -17,7 +17,26 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+
+    - name: Build changelog
+      id: changelog
+      uses: TriPSs/conventional-changelog-action@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        output-file: "false"
+        skip-commit: "true"
+        skip-git-pull: "true"
+
+    - name: Create release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "build/libs/*.jar"
+        tag: ${{ steps.changelog.outputs.tag }}
+        name: ${{ steps.changelog.outputs.tag }}
+        body: ${{ steps.changelog.outputs.clean_changelog }}
+
