@@ -3,6 +3,7 @@ package dev.rodrick.acer.events
 import dev.rodrick.acer.AcerMod
 import dev.rodrick.acer.annotations.Init
 import dev.rodrick.acer.config.AcerConfig
+import dev.rodrick.acer.config.AcerConfigData
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -27,25 +28,28 @@ object PlayerNotifier {
 
     private const val ENDPOINT = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush"
 
+    private val config: AcerConfigData.Notifier
+        get() = AcerConfig.data.notifier
+
     @Init
     fun init() {
         ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
-            if (AcerConfig.data.notifier.onJoin) {
-                sendNotification("Player joined", "${handler.player.name.string} joined the server")
+            val playerName = handler.player.name.string
+            if (config.onJoin && !config.blacklist.contains(playerName)) {
+                sendNotification("Player joined", "$playerName joined the server")
             }
         }
 
         ServerPlayConnectionEvents.DISCONNECT.register { handler, _ ->
-            if (AcerConfig.data.notifier.onLeave) {
-                sendNotification("Player left", "${handler.player.name.string} left the server")
+            val playerName = handler.player.name.string
+            if (config.onLeave && !config.blacklist.contains(playerName)) {
+                sendNotification("Player left", "$playerName left the server")
             }
         }
     }
 
     private fun sendNotification(title: String, text: String?) = runBlocking {
-        val (_, _, apiKey, devices) = AcerConfig.data.notifier
-
-        val body = NotificationOptions(apiKey, devices.joinToString(","), title, text)
+        val body = NotificationOptions(config.apiKey, config.devices.joinToString(","), title, text)
 
         AcerMod.logger.info("Sending notification, $body")
 

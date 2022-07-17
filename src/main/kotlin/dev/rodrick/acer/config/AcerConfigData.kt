@@ -18,6 +18,7 @@ data class AcerConfigData(
     data class Notifier(
         val onJoin: Boolean = false,
         val onLeave: Boolean = false,
+        val blacklist: Set<String> = emptySet(),
         val apiKey: String = "",
         val devices: Set<String> = emptySet()
     )
