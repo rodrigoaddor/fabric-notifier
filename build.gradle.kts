@@ -11,8 +11,8 @@ plugins {
     id("fabric-loom") version "0.12-SNAPSHOT"
     id("com.google.devtools.ksp") version "1.7.10-1.0.6"
 
-    kotlin("jvm")
-    kotlin("plugin.serialization")
+    kotlin("jvm") version "1.7.0"
+    kotlin("plugin.serialization") version "1.7.0"
 }
 
 repositories {
