@@ -47,7 +47,7 @@ object FindCommand : BaseCommand {
         val item = try {
             ItemStackArgumentType.getItemStackArgument(ctx, "item").item
         } catch (_: java.lang.IllegalArgumentException) {
-            player.itemsHand.firstOrNull { !it.isEmpty }?.item
+            player.handItems.firstOrNull { !it.isEmpty }?.item
         } ?: throw SimpleCommandExceptionType(Text.literal("No item to find")).create()
 
 
