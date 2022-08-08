@@ -6,7 +6,8 @@ import kotlinx.serialization.Serializable
 data class AcerConfigData(
     val replantSaplings: ReplantSaplings = ReplantSaplings(),
     val notifier: Notifier = Notifier(),
-    val finder: Finder = Finder()
+    val finder: Finder = Finder(),
+    val editableSigns: Boolean = true
 ) {
     @Serializable
     data class ReplantSaplings(
