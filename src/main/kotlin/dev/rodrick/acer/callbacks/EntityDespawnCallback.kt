@@ -1,4 +1,4 @@
-package dev.rodrick.acer.event
+package dev.rodrick.acer.callbacks
 
 import net.fabricmc.fabric.api.event.Event
 import net.fabricmc.fabric.api.event.EventFactory
