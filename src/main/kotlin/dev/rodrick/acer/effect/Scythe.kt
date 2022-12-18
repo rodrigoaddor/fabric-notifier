@@ -2,6 +2,7 @@ package dev.rodrick.acer.effect
 
 import dev.rodrick.acer.AcerMod
 import dev.rodrick.acer.annotations.Init
+import dev.rodrick.acer.config.AcerConfig
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.block.CropBlock
 import net.minecraft.entity.ItemEntity
@@ -25,6 +26,9 @@ object Scythe {
     @Init
     fun init() {
         UseBlockCallback.EVENT.register { player, world, hand, hitResult ->
+            val enabled = AcerConfig.data.scythes
+            if (!enabled) return@register ActionResult.PASS
+
             val blockPos = hitResult.blockPos
             val blockState = world.getBlockState(blockPos)
             val heldStack = player.getStackInHand(hand)
