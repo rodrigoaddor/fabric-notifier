@@ -37,6 +37,7 @@ jobs:
         output-file: "false"
         skip-commit: "true"
         skip-git-pull: "true"
+        tag-prefix: ""
 
     - name: Create release
       uses: ncipollo/release-action@v1
