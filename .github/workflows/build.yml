@@ -45,3 +45,27 @@ jobs:
         tag: ${{ steps.changelog.outputs.tag }}
         name: ${{ steps.changelog.outputs.tag }}
         body: ${{ steps.changelog.outputs.clean_changelog }}
+
+  deploy:
+    runs-on: ubuntu-22.04
+    environment: maple
+    env:
+      FILE: "acer-${{ github.ref_name }}.jar"
+    steps:
+      - name: Download JAR
+        uses: robinraju/release-downloader@v1
+        with:
+          tag: $GITHUB_REF_NAME
+          fileName: "$FILE"
+
+      - name: Upload
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_PORT: ${{ secrets.SFTP_PORT }}
+          SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          sftp -oPort=$SFTP_PORT -oStrictHostKeyChecking=no -b - $SFTP_USERNAME@$SFTP_HOST <<EOF
+            rm mods/acer-*.jar
+            put $FILE mods/
+          EOF
