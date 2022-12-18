@@ -1,11 +1,12 @@
 package dev.rodrick.acer.config
 
+import dev.rodrick.acer.hooks.PlayerHooks
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AcerConfigData(
     val replantSaplings: ReplantSaplings = ReplantSaplings(),
-    val notifier: Notifier = Notifier(),
+    val webhooks: Webhooks = Webhooks(),
     val finder: Finder = Finder(),
     val editableSigns: Boolean = true
 ) {
@@ -16,12 +17,16 @@ data class AcerConfigData(
     )
 
     @Serializable
-    data class Notifier(
-        val onJoin: Boolean = false,
-        val onLeave: Boolean = false,
-        val blacklist: Set<String> = emptySet(),
-        val apiKey: String = "",
-        val devices: Set<String> = emptySet()
+    data class Webhooks(
+        val endpoint: String = "",
+        val headers: Map<String, String>? = mapOf(),
+
+        val onJoin: PlayerHooks.Options? = PlayerHooks.Options(
+            message = "Player %player% joined the game"
+        ),
+        val onLeave: PlayerHooks.Options? = PlayerHooks.Options(
+            message = "Player %player% left the game ",
+        )
     )
 
     @Serializable

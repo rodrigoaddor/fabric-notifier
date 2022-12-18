@@ -2,7 +2,7 @@ package dev.rodrick.acer.events
 
 import dev.rodrick.acer.annotations.Init
 import dev.rodrick.acer.config.AcerConfig
-import dev.rodrick.acer.event.EntityDespawnCallback
+import dev.rodrick.acer.callbacks.EntityDespawnCallback
 import net.minecraft.entity.ItemEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.particle.ParticleTypes
