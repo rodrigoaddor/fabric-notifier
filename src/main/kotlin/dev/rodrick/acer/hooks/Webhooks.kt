@@ -6,8 +6,7 @@ import dev.rodrick.acer.config.AcerConfigData
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 abstract class Webhooks {
     private val client = HttpClient(CIO)
@@ -15,13 +14,13 @@ abstract class Webhooks {
     protected val config: AcerConfigData.Webhooks
         get() = AcerConfig.data.webhooks
 
-    protected fun send(message: String) = runBlocking {
+    protected fun send(message: String) {
         if (config.endpoint.isEmpty()) {
             AcerMod.logger.warn("Webhook endpoint is not set")
-            return@runBlocking
+            return
         }
 
-        launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val response = client.post(config.endpoint) {
                 headers {
                     config.headers?.forEach { (key, value) ->
