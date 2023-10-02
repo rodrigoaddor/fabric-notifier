@@ -104,12 +104,12 @@ object Marker {
     }
 
     private var Entity.isMarker: Boolean
-        get() = scoreboardTags.contains(MARKER_TAG)
+        get() = commandTags.contains(MARKER_TAG)
         set(value) {
             if (value) {
-                scoreboardTags.add(MARKER_TAG)
+                commandTags.add(MARKER_TAG)
             } else {
-                scoreboardTags.remove(MARKER_TAG)
+                commandTags.remove(MARKER_TAG)
             }
         }
 }

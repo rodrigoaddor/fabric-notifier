@@ -28,12 +28,12 @@ object AcerCommand : BaseCommand {
     private val reloadConfig = literal("reload").executes { context ->
         try {
             AcerConfig.load()
-            context.source.sendFeedback(Text.literal("[Acer] Config reloaded"), true)
+            context.source.sendFeedback({ Text.literal("[Acer] Config reloaded") }, true)
             0
         } catch (e: Exception) {
             AcerMod.logger.warn("Error reloading config: $e")
             context.source.sendFeedback(
-                Text.literal("[Acer] Error reloading config, check console for more information"), false
+                {Text.literal("[Acer] Error reloading config, check console for more information")}, false
             )
             1
         }
@@ -41,7 +41,7 @@ object AcerCommand : BaseCommand {
 
     private val listConfig = literal("config").executes { context ->
         context.source.sendFeedback(
-            Text.literal(AcerConfig.data.toString()),
+            {Text.literal(AcerConfig.data.toString())},
             false
         )
         0

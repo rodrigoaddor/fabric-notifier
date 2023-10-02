@@ -7,21 +7,21 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.block.CropBlock
 import net.minecraft.entity.ItemEntity
 import net.minecraft.item.BlockItem
-import net.minecraft.loot.context.LootContext
+import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
-import net.minecraft.tag.BlockTags
-import net.minecraft.tag.TagKey
+import net.minecraft.registry.tag.BlockTags
+import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
-import net.minecraft.util.registry.Registry
+import net.minecraft.registry.RegistryKeys
 
 object Scythe {
     private val CROPS = BlockTags.CROPS
-    private val SCYTHES = TagKey.of(Registry.ITEM_KEY, Identifier(AcerMod.MOD_ID, "scythes"))
+    private val SCYTHES = TagKey.of(RegistryKeys.ITEM, Identifier(AcerMod.MOD_ID, "scythes"))
 
     @Init
     fun init() {
@@ -44,11 +44,11 @@ object Scythe {
                 ) == true
             ) {
                 if (serverWorld != null) {
-                    val lootContext = LootContext.Builder(serverWorld).random(serverWorld.random)
-                        .parameter(LootContextParameters.ORIGIN, Vec3d.ofCenter(blockPos))
-                        .parameter(LootContextParameters.TOOL, heldStack)
-                        .optionalParameter(LootContextParameters.THIS_ENTITY, player)
-                        .optionalParameter(LootContextParameters.BLOCK_ENTITY, blockEntity)
+                    val lootContext = LootContextParameterSet.Builder(serverWorld)
+                        .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(blockPos))
+                        .add(LootContextParameters.TOOL, heldStack)
+                        .addOptional(LootContextParameters.THIS_ENTITY, player)
+                        .addOptional(LootContextParameters.BLOCK_ENTITY, blockEntity)
 
                     blockState.getDroppedStacks(lootContext).forEach { stack ->
                         if ((stack.item as? BlockItem)?.let {

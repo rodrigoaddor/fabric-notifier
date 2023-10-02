@@ -6,8 +6,8 @@ import dev.rodrick.acer.callbacks.EntityDespawnCallback
 import net.minecraft.entity.ItemEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.particle.ParticleTypes
+import net.minecraft.registry.tag.ItemTags
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.tag.ItemTags
 import kotlin.math.pow
 
 object SaplingPlanter {
