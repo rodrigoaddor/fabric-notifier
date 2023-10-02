@@ -8,11 +8,11 @@ val transitiveInclude: Configuration by configurations.creating {
 
 plugins {
     idea
-    id("fabric-loom") version "0.12-SNAPSHOT"
-    id("com.google.devtools.ksp") version "1.7.10-1.0.6"
+    id("fabric-loom") version "1.4-SNAPSHOT"
+    id("com.google.devtools.ksp") version "1.9.10-1.0.13"
 
-    kotlin("jvm") version "1.7.0"
-    kotlin("plugin.serialization") version "1.7.0"
+    kotlin("jvm") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.10"
 }
 
 repositories {
@@ -46,7 +46,7 @@ dependencies {
 
     include(modImplementation("net.fabricmc", "fabric-language-kotlin", fabricKotlinVersion))
 
-    transitiveInclude(implementation("com.charleskorn.kaml:kaml:0.46.0")!!)
+    transitiveInclude(implementation("com.charleskorn.kaml", "kaml", "0.55.0"))
 
     include(implementation("io.ktor", "ktor-client-core", ktorVersion))
     transitiveInclude(implementation("io.ktor", "ktor-client-cio", ktorVersion))
