@@ -2,7 +2,6 @@ package dev.rodrick.acer.effect
 
 import dev.rodrick.acer.annotations.Init
 import dev.rodrick.acer.config.AcerConfig
-import dev.rodrick.acer.mixin.EntityAccessor
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback
@@ -15,7 +14,6 @@ import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.inventory.Inventory
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
-import net.minecraft.util.Identifier
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
@@ -93,7 +91,6 @@ object Marker {
             isInvisible = true
             isInvulnerable = true
             isSilent = true
-            (this as EntityAccessor).setLootTable(Identifier("minecraft", "empty"))
             disableExperienceDropping()
             activeStatusEffects[StatusEffects.INVISIBILITY] =
                 StatusEffectInstance(StatusEffects.INVISIBILITY, Int.MAX_VALUE, 0, false, false)

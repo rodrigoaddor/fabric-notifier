@@ -5,19 +5,20 @@ import dev.rodrick.acer.annotations.Init
 import dev.rodrick.acer.config.AcerConfig
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.minecraft.block.CropBlock
+import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.ItemEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.registry.tag.TagKey
+import net.minecraft.server.world.ServerWorld
+import net.minecraft.sound.SoundCategory
 import net.minecraft.util.ActionResult
+import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
-import net.minecraft.registry.RegistryKeys
 
 object Scythe {
     private val CROPS = BlockTags.CROPS
@@ -66,11 +67,11 @@ object Scythe {
                         serverWorld.spawnEntity(entity)
                     }
 
-                    heldStack.damage(1, player) {
-                        serverWorld.playSound(
-                            null, it.x, it.y, it.z, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0f, 1.0f
-                        )
-                    }
+                    heldStack.damage(
+                        1,
+                        player,
+                        if (hand == Hand.MAIN_HAND) EquipmentSlot.MAINHAND else EquipmentSlot.OFFHAND
+                    )
 
                     player.itemCooldownManager.set(heldStack.item, 10)
 

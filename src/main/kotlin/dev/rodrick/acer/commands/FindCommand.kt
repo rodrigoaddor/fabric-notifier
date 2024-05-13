@@ -14,10 +14,8 @@ import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.text.MutableText
 import net.minecraft.text.Style
 import net.minecraft.text.Text
-import net.minecraft.text.TextContent
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -57,7 +55,7 @@ object FindCommand : BaseCommand {
             Marker.spawn(world, position)
         }
 
-        val message = MutableText.of(TextContent.EMPTY).apply {
+        val message = Text.empty().apply {
             if (amount == 0) {
                 append(Text.literal("No "))
                 append(Text.translatable(item.translationKey))

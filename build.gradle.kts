@@ -8,11 +8,11 @@ val transitiveInclude: Configuration by configurations.creating {
 
 plugins {
     idea
-    id("fabric-loom") version "1.4-SNAPSHOT"
-    id("com.google.devtools.ksp") version "1.9.10-1.0.13"
+    id("fabric-loom") version "1.6-SNAPSHOT"
+    id("com.google.devtools.ksp") version "1.9.24-1.0.20"
 
-    kotlin("jvm") version "1.9.10"
-    kotlin("plugin.serialization") version "1.9.10"
+    kotlin("jvm") version "1.9.24"
+    kotlin("plugin.serialization") version "1.9.24"
 }
 
 repositories {
